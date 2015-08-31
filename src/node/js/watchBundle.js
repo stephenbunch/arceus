@@ -11,10 +11,10 @@ import formatError from '../util/formatError';
 
 /**
  * @param {Object} params
- * @param {Function} callback
+ * @param {Function} [callback]
  * @returns {Watch}
  */
-export default function( params, callback  ) {
+export default function( params, callback = ( () => {} )  ) {
   var path = require( 'path' );
   var chokidar = require( 'chokidar' );
   var watchify = require( 'watchify' );
