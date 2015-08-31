@@ -20,3 +20,7 @@ gulp.task( 'clean', function() {
 gulp.task( 'watch', function() {
   arceus.util.gulpWatch( 'src/**/*', [ 'make:src' ] );
 });
+
+gulp.task( 'default', function() {
+  return arceus.util.gulpAsync( gulp, 'make' );
+});
