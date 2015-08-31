@@ -45,19 +45,21 @@ export default function( params, callback = ( () => {} )  ) {
   );
 
   var make = () => {
-    mergeStreams([
+    return mergeStreams([
       build( bundle, outfile ),
       build( minify, minfile )
-    ])
-    .on( 'error', err => console.log( formatError( err ) ) )
-    .on( 'end', () => callback() );
+    ]);
   };
 
   var rebuild = () => {
     bundle.invalidate( entry );
   };
 
-  bundle.on( 'update', make );
+  bundle.on( 'update', () => {
+    make()
+      .on( 'error', err => console.log( formatError( err ) ) )
+      .on( 'end', () => callback() );
+  });
 
   // Since we typically use a di container to link code across a project
   // rather than module imports, watchify isn't able to detect new and
@@ -70,13 +72,17 @@ export default function( params, callback = ( () => {} )  ) {
   watcher.on( 'add', file => rebuild() );
   watcher.on( 'unlink', file => rebuild() );
 
-  make();
-
-  return {
-    rebuild,
-    dispose: () => {
-      bundle.close();
-      watcher.close();
-    }
-  };
+  return new Promise( ( resolve, reject ) => {
+    make()
+      .on( 'error', err => reject( err ) )
+      .on( 'end', () => {
+        resolve({
+          rebuild,
+          dispose: () => {
+            bundle.close();
+            watcher.close();
+          }
+        })
+      });
+  });
 };

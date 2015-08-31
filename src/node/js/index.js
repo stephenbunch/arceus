@@ -1,9 +1,9 @@
 import babelify from './babelify';
 import bundle from './bundle';
-import watchBundle from './watchBundle';
+import watchBundleAsync from './watchBundleAsync';
 
 export default {
   babelify,
   bundle,
-  watchBundle
+  watchBundleAsync
 };
