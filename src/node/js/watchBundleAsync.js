@@ -37,6 +37,9 @@ export default function( params, callback = ( () => {} )  ) {
   var minify = watchify(
     browserify(
       merge( cloneDeep( params ), {
+        browserify: {
+          debug: false
+        },
         config: {
           uglify: true
         }
