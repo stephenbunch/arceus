@@ -12,7 +12,7 @@ import formatError from '../util/formatError';
 /**
  * @param {Object} params
  * @param {Function} [callback]
- * @returns {Watch}
+ * @returns {Promise.<Watch>}
  */
 export default function( params, callback = ( () => {} )  ) {
   var path = require( 'path' );
