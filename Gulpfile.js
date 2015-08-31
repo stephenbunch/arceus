@@ -10,7 +10,7 @@ gulp.task( 'make:src', function() {
 });
 
 gulp.task( 'make', function() {
-  return arceus.util.gulpAsync( 'clean', [ 'make:src' ] );
+  return arceus.util.gulpAsync( gulp, 'clean', [ 'make:src' ] );
 });
 
 gulp.task( 'clean', function() {

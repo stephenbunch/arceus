@@ -1,6 +1,5 @@
-export default function( ...tasks ) {
+export default function( gulp, ...tasks ) {
   return new Promise( ( resolve, reject ) => {
-    var gulp = require( `${ process.env.PWD }/node_modules/gulp` );
     var sequence = require( 'run-sequence' ).use( gulp );
     tasks = tasks.concat([
       function( err ) {
