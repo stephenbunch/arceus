@@ -3,7 +3,7 @@ require( 'babel/register' )({
 });
 
 var gulp = require( 'gulp' );
-var arceus = require( './src/node' );
+var arceus = require( './src' );
 
 gulp.task( 'make:src', function() {
   return arceus.js.babelify( 'src/**/*', 'dist' );
@@ -18,7 +18,13 @@ gulp.task( 'clean', function() {
 });
 
 gulp.task( 'watch', function() {
-  arceus.util.gulpWatch( 'src/**/*', [ 'make:src' ] );
+  arceus.util.watch( 'src/**/*', function() {
+    arceus.util.gulpAsync( gulp, 'make:src' ).then( function() {
+      return arceus.util.touchFileAsync( 'package.json' );
+    }).catch( function( err ) {
+      console.log( arceus.util.formatError( err ) );
+    });
+  });
 });
 
 gulp.task( 'default', function() {

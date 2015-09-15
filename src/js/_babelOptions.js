@@ -1,3 +1,5 @@
+import log from '../util/log';
+
 /**
  * @param {String} dirname
  * @returns {Object}
@@ -30,7 +32,7 @@ function resolveRc( dirname ) {
     try {
       return JSON.parse( stripJsonComments( babelrc ) );
     } catch ( err ) {
-      console.log( err );
+      log( err );
     }
   }
   return {};

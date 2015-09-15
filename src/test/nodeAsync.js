@@ -4,7 +4,7 @@
  */
 export default function( specFiles ) {
   var { fork } = require( 'child_process' );
-  var runner = fork( './_mochaRunner.js', {
+  var runner = fork( __dirname + '/_mochaRunner.js', {
     env: {
       SPEC_FILES: specFiles
     }

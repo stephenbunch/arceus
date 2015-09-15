@@ -1,17 +1,7 @@
-import css from './css';
-import js from './js';
-import node from './node';
-import test from './test';
-import util from './util';
-import web from './web';
-import NodeBundle from './NodeBundle';
+import sendOnline from './sendOnline';
+import serveAsync from './serveAsync';
 
 export default {
-  css,
-  js,
-  node,
-  test,
-  util,
-  web,
-  NodeBundle
+  sendOnline,
+  serveAsync
 };

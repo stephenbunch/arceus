@@ -1,5 +1,6 @@
 import formatError from '../util/formatError';
 import killProcessAsync from '../util/killProcessAsync';
+import log from '../util/log';
 
 /**
  * @param {String} entry
@@ -14,8 +15,11 @@ export default async function( entry, options ) {
     var id = ++uid;
     if ( proc ) {
       if ( !killTask ) {
+        log( 'Killing process...' );
         killTask = killProcessAsync( proc ).then( () => {
+          proc = null;
           killTask = null;
+          log( 'Process killed' );
         });
       }
       await killTask;
@@ -27,7 +31,11 @@ export default async function( entry, options ) {
     }
   };
   var server = {
-    restartAsync,
+    async restartAsync() {
+      log( 'Restaring server...' );
+      await restartAsync();
+      log( 'Server restarted' );
+    },
     stopAsync() {
       return killProcessAsync( proc );
     }
@@ -47,7 +55,7 @@ function startAsync( entry, { args = [], nodeArgs = [] } = {} ) {
   return new Promise( resolve => {
     var { fork } = require( 'child_process' );
     var proc = fork( entry, args, {
-      execArgv: nodeArgs.concat([ '--harmony' ])
+      execArgv: nodeArgs
     });
     proc.on( 'message', function( message ) {
       try {
@@ -56,7 +64,7 @@ function startAsync( entry, { args = [], nodeArgs = [] } = {} ) {
           resolve({ proc, message });
         }
       } catch ( err ) {
-        console.log( formatError( err ) );
+        log( formatError( err ) );
       }
     });
   });

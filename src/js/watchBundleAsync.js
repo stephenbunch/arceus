@@ -2,6 +2,8 @@ import browserify from './_browserify';
 import build from './_build';
 import mergeStreams from '../util/mergeStreams';
 import formatError from '../util/formatError';
+import log from '../util/log';
+import touchFileAsync from '../util/touchFileAsync';
 
 /**
  * @typedef Watch
@@ -20,6 +22,7 @@ export default function( params, callback = ( () => {} )  ) {
   var watchify = require( 'watchify' );
   var cloneDeep = require( 'lodash.clonedeep' );
   var merge = require( 'lodash.merge' );
+  var fs = require( 'fs' );
 
   params = merge( cloneDeep( params ), {
     config: {
@@ -55,12 +58,12 @@ export default function( params, callback = ( () => {} )  ) {
   };
 
   var rebuild = () => {
-    bundle.invalidate( entry );
+    touchFileAsync( entry ).catch( err => log( formatError( err ) ) );
   };
 
   bundle.on( 'update', () => {
     make()
-      .on( 'error', err => console.log( formatError( err ) ) )
+      .on( 'error', err => log( formatError( err ) ) )
       .on( 'end', () => callback() );
   });
 

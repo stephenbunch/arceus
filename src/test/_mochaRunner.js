@@ -1,3 +1,7 @@
+require( 'babel/register' )({
+  stage: 0
+});
+
 var Mocha = require( 'mocha' );
 var chai = require( 'chai' );
 var glob = require( 'glob' );

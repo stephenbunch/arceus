@@ -4,6 +4,9 @@
  * @returns {Function}
  */
 export default function( paths, callback ) {
+  if ( typeof callback !== 'function' ) {
+    throw new Error( 'Callback must be a function.' );
+  }
   if ( paths ) {
     if ( typeof paths === 'string' ) {
       paths = [ paths ];

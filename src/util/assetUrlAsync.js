@@ -9,8 +9,8 @@ export default function( publicDir, path ) {
       } else {
         var uri = new URI( path );
         uri.addQuery( digest );
-        return uri.toString();
+        resolve( uri.toString() );
       }
     });
   });
-}
+};

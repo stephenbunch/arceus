@@ -6,12 +6,13 @@ import karmaOptions from './_karmaOptions';
  * @returns {Promise}
  */
 export default function( specFiles, opts = {} ) {
-  var { server } = require( 'karma' );
+  var { Server } = require( 'karma' );
   var assign = require( 'lodash.assign' );
   return new Promise( resolve => {
-    server.start(
+    var server = new Server(
       assign( karmaOptions( specFiles ), opts, { singleRun: true } ),
       resolve
     );
+    server.start();
   });
 };
