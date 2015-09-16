@@ -3,7 +3,7 @@ import browserify from './_browserify';
 import mergeStreams from '../util/mergeStreams';
 
 export default function( params ) {
-  var cloneDeep = require( 'lodash.cloneDeep' );
+  var cloneDeep = require( 'lodash.clonedeep' );
   var merge = require( 'lodash.merge' );
   var path = require( 'path' );
 
