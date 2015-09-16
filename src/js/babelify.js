@@ -13,14 +13,11 @@ export default function( source, outdir ) {
   }
   var gulp = require( 'gulp' );
   var babel = require( 'gulp-babel' );
-  var assign = require( 'lodash.assign' );
   return mergeStreams(
     source.map( glob => {
       var stream = gulp.src( glob ).pipe(
         babel(
-          assign({
-            sourceMaps: true
-          }, babelOptions( baseFromGlob( glob ) ) )
+          babelOptions( baseFromGlob( glob ) )
         )
       ).on( 'error', err => ret.emit( 'error', err ) );
       var ret = stream.pipe( gulp.dest( outdir ) );

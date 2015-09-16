@@ -7,7 +7,9 @@ import log from '../util/log';
 export default function( dirname ) {
   var assign = require( 'lodash.assign' );
   var opts = {
-    sourceRoot: dirname
+    sourceRoot: dirname,
+    stage: 0,
+    sourceMaps: true
   };
 
   // Babel only looks in the current working directory for babelrc files. For

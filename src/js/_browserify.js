@@ -32,9 +32,7 @@ export default function( params ) {
   var bundle = require( 'browserify' )( browserify );
   bundle = bundle.transform(
     require( 'babelify' ).configure(
-      assign({
-        sourceMaps: true
-      }, babelOptions( path.dirname( entry ) ) )
+      babelOptions( path.dirname( entry ) )
     )
   );
 
