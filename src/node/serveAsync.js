@@ -25,16 +25,28 @@ export default async function( entry, options ) {
       await killTask;
     }
     if ( id === uid ) {
-      var app = await startAsync( entry, options );
-      proc = app.proc;
-      server.port = app.message.port;
+      let app = await startAsync( entry, options );
+      if ( id === uid ) {
+        proc = app.proc;
+        if ( app.result.error ) {
+          throw new Error( `Server error: ${ app.result.error }` );
+        } else {
+          server.port = app.result.port;
+        }
+      } else {
+        await killProcessAsync( app.proc );
+      }
     }
   };
   var server = {
     async restartAsync() {
       log( 'Restaring server...' );
-      await restartAsync();
-      log( 'Server restarted' );
+      try {
+        await restartAsync();
+        log( 'Server restarted' );
+      } catch( err ) {
+        log( err.message )
+      }
     },
     stopAsync() {
       return killProcessAsync( proc );
@@ -52,20 +64,24 @@ export default async function( entry, options ) {
  * @returns {Promise}
  */
 function startAsync( entry, { args = [], nodeArgs = [] } = {} ) {
-  return new Promise( resolve => {
+  return new Promise( ( resolve, reject ) => {
     var { fork } = require( 'child_process' );
     var proc = fork( entry, args, {
       execArgv: nodeArgs
     });
     proc.on( 'message', function( message ) {
+      var result;
       try {
-        message = JSON.parse( message );
-        if ( message.status === 'online' ) {
-          resolve({ proc, message });
-        }
+        result = {
+          proc,
+          result: JSON.parse( message )
+        };
       } catch ( err ) {
         log( formatError( err ) );
+        reject( err );
+        return;
       }
+      resolve( result );
     });
   });
 }
