@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/stephenbunch/arceus#readme",
   "dependencies": {
-    "URIjs": "^1.16.0",
+    "urijs": "^1.16.0",
     "autoprefixer-core": "^5.2.1",
     "babel": "^5.8.23",
     "babelify": "^6.2.0",

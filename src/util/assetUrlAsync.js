@@ -1,5 +1,5 @@
 export default function( publicDir, path ) {
-  var URI = require( 'URIjs' );
+  var URI = require( 'urijs' );
   var checksum = require( 'checksum' );
   var filename = `${ publicDir }/${ path.replace( /^\//, '' ) }`;
   return new Promise( ( resolve, reject ) => {
