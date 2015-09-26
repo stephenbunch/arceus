@@ -13,7 +13,7 @@ export default async function( entry, options ) {
   var killTask;
   var restartAsync = async () => {
     var id = ++uid;
-    if ( proc ) {
+    if ( proc && proc.connected ) {
       if ( !killTask ) {
         log( 'Killing process...' );
         killTask = killProcessAsync( proc ).then( () => {
