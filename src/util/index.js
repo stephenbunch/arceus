@@ -3,6 +3,7 @@ import availablePortAsync from './availablePortAsync';
 import baseFromGlob from './baseFromGlob';
 import copy from './copy';
 import deleteAsync from './deleteAsync';
+import execAsync from './execAsync';
 import formatError from './formatError';
 import gulpAsync from './gulpAsync';
 import gulpWatch from './gulpWatch';
@@ -19,6 +20,7 @@ export default {
   baseFromGlob,
   copy,
   deleteAsync,
+  execAsync,
   formatError,
   gulpAsync,
   gulpWatch,
