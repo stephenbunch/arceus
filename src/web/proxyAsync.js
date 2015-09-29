@@ -7,7 +7,10 @@ export default async function({ port }) {
       port: await availablePortAsync( 3000 )
     },
     port: await availablePortAsync( 3000 ),
-    proxy: `localhost:${ port }`
+    proxy: {
+      target: `localhost:${ port }`,
+      ws: true
+    }
   });
   return {
     reload() {
