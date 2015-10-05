@@ -1,6 +1,6 @@
 {
   "name": "arceus",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "A collection of build tools.",
   "main": "dist",
   "scripts": {
