@@ -41,9 +41,6 @@ export default function( params, callback = ( () => {} )  ) {
     browserify(
       merge( cloneDeep( params ), {
         config: {
-          browserify: {
-            debug: false
-          },
           uglify: true
         }
       })
