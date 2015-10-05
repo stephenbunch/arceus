@@ -1,6 +1,6 @@
 {
   "name": "arceus",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A collection of build tools.",
   "main": "dist",
   "scripts": {
@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/stephenbunch/arceus#readme",
   "dependencies": {
-    "urijs": "^1.16.0",
     "autoprefixer-core": "^5.2.1",
     "babel": "^5.8.23",
     "babelify": "^6.2.0",
@@ -28,6 +27,7 @@
     "chokidar": "^1.0.5",
     "del": "^1.2.1",
     "envify": "^3.4.0",
+    "exorcist": "^0.4.0",
     "glob": "^5.0.14",
     "glob2base": "0.0.12",
     "gulp": "^3.9.0",
@@ -60,6 +60,7 @@
     "sinon-chai": "^2.8.0",
     "strip-json-comments": "^1.0.4",
     "uglifyify": "^3.0.1",
+    "urijs": "^1.16.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.4.0"
   }

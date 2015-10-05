@@ -14,9 +14,6 @@ export default function( params ) {
   var minify = browserify(
     merge({
       config: {
-        browserify: {
-          debug: false
-        },
         uglify: true
       }
     }, cloneDeep( params ) )
