@@ -1,4 +1,5 @@
 import mergeStreams from '../util/mergeStreams';
+import exorcist from './_exorcist';
 
 /**
  * @param {Browserify} bundle
@@ -8,7 +9,6 @@ import mergeStreams from '../util/mergeStreams';
 export default function( bundle, outfile ) {
   var path = require( 'path' );
   var gulp = require( 'gulp' );
-  var exorcist = require( 'exorcist' );
 
   var outdir = path.dirname( outfile );
   var outname = path.basename( outfile );
