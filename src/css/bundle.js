@@ -34,7 +34,7 @@ export default function({ entry, outfile, transform }) {
         autoprefixer({
           browsers: [ 'last 2 versions' ]
         })
-      ])
+      ]).on( 'error', err => ret.emit( 'error', err ) )
     )
     .pipe( concat( path.basename( outfile ) ) )
     .pipe( cloneSink )
