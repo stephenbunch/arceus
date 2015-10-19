@@ -25,14 +25,14 @@ export default function( params ) {
   }, params );
 
   var { entry, config = {} } = params;
-  var { envify, uglify, browserify } = config;
+  var { envify, uglify, browserify, babelify } = config;
 
   browserify.entries = entry;
 
   var bundle = require( 'browserify' )( browserify );
   bundle = bundle.transform(
     require( 'babelify' ).configure(
-      babelOptions( path.dirname( entry ) )
+      assign( babelOptions( path.dirname( entry ) ), babelify )
     )
   );
 
