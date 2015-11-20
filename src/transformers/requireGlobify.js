@@ -26,12 +26,11 @@ export default function({ Plugin, types: t }) {
             return t.objectExpression(
               paths.map( path => {
                 var name = resolvePathFromGlob( globPath, path );
+                var key = Path.dirname( name ) + '/' + Path.basename( name, Path.extname( name ) );
+                key = key.replace( /^\.\//, '' );
                 return t.property(
                   'init',
-                  t.literal(
-                    Path.dirname( name ) + '/' +
-                    Path.basename( name, Path.extname( name ) )
-                  ),
+                  t.literal( key ),
                   t.callExpression( node.callee, [ t.literal( basePath + name ) ] )
                 );
               })
