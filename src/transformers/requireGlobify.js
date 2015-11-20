@@ -17,7 +17,7 @@ export default function({ Plugin, types: t }) {
           if ( mode && mode.value.value === 'hash' ) {
             let globPath = node.arguments[0].value;
             let basePath = baseFromGlob( globPath );
-            if ( globPath.startsWith( './' ) ) {
+            if ( !globPath.startsWith( '/' ) ) {
               globPath = Path.resolve( Path.dirname( file.opts.filename ), globPath );
             }
             let paths = glob.sync( globPath, {
