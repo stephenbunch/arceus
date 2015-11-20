@@ -1,12 +1,22 @@
 export default {
   configure( options = {} ) {
-    return function({ Plugin, types: t }) {
-      return new Plugin( 'dependencyInjection', {
+    return function({ types: t }) {
+      var VISITED = Symbol();
+      return {
         visitor: {
-          Program: function( node, parent, scope, file ) {
+          Program( path, pluginPass ) {
+            var { node, parent, scope } = path;
+            var { filename } = pluginPass.file.opts;
+
+            if ( node[ VISITED ] ) {
+              return;
+            } else {
+              node[ VISITED ] = true;
+            }
+
             if (
               typeof options.shouldTransform === 'function' &&
-              !options.shouldTransform( file.opts.filename )
+              !options.shouldTransform( filename )
             ) {
               return;
             }
@@ -15,15 +25,12 @@ export default {
             var imports = [];
             var defaultExport;
             node.body.forEach( function( node ) {
-              switch ( node.type ) {
-                case 'ImportDeclaration':
-                  imports.push( node );
-                  break;
-                case 'ExportDefaultDeclaration':
+              if ( t.isImportDeclaration( node ) ) {
+                imports.push( node );
+              } else if ( t.isExportDefaultDeclaration( node ) ) {
                 defaultExport = node;
-                  break;
-                default:
-                  body.push( node );
+              } else {
+                body.push( node );
               }
             });
 
@@ -33,8 +40,8 @@ export default {
             imports.forEach( function( node ) {
               if ( typeof options.resolveName === 'function' ) {
                 names.push(
-                  t.literal(
-                    options.resolveName( node.source.value, file.opts.filename ) ||
+                  t.stringLiteral(
+                    options.resolveName( node.source.value, filename ) ||
                     node.source.value
                   )
                 );
@@ -60,24 +67,26 @@ export default {
               }
             });
 
-            return t.program([
-              t.exportDefaultDeclaration(
-                t.arrayExpression(
-                  names.concat([
-                    t.functionExpression( null, params,
-                      t.blockStatement(
-                        header.concat( body ).concat([
-                          t.returnStatement( defaultExport.declaration )
-                        ])
+            path.replaceWith(
+              t.program([
+                t.exportDefaultDeclaration(
+                  t.arrayExpression(
+                    names.concat([
+                      t.functionExpression( null, params,
+                        t.blockStatement(
+                          header.concat( body ).concat([
+                            t.returnStatement( defaultExport.declaration )
+                          ])
+                        )
                       )
-                    )
-                  ])
+                    ])
+                  )
                 )
-              )
-            ]);
+              ])
+            );
           }
         }
-      });
+      };
     };
   }
 };

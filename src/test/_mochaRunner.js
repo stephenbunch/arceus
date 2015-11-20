@@ -1,5 +1,5 @@
-require( 'babel/register' )({
-  stage: 0
+require( 'babel-core/register' )({
+  presets: [ 'es2015' ]
 });
 
 var Mocha = require( 'mocha' );

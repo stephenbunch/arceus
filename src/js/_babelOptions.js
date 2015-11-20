@@ -1,14 +1,24 @@
 import log from '../util/log';
+import requireGlobify from '../transformers/requireGlobify';
+import decorators from '../transformers/decorators';
 
 /**
  * @param {String} dirname
  * @returns {Object}
  */
 export default function( dirname ) {
-  var assign = require( 'lodash.assign' );
   var opts = {
     sourceRoot: dirname,
-    stage: 0,
+    plugins: [
+      require( 'babel-plugin-syntax-decorators' ),
+      decorators,
+      ...require( 'babel-preset-es2015' ).plugins,
+      require( 'babel-plugin-transform-class-properties' ),
+      require( 'babel-plugin-transform-function-bind' ),
+      require( 'babel-plugin-syntax-async-functions' ),
+      require( 'babel-plugin-transform-regenerator' ),
+      requireGlobify
+    ],
     sourceMaps: true
   };
 
@@ -17,7 +27,7 @@ export default function( dirname ) {
   // web projects that contain both web and node code, we'll want to be able to
   // specify different babel configurations for each platform (eg. use
   // generators in node but not on the web.)
-  assign( opts, resolveRc( dirname ) );
+  Object.assign( opts, resolveRc( dirname ) );
 
   return opts;
 };

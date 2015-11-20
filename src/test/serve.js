@@ -11,11 +11,10 @@ import karmaOptions from './_karmaOptions';
  * @returns {Object}
  */
 export default function( specFiles, opts = {} ) {
-  var assign = require( 'lodash.assign' );
   var { server, runner } = require( 'karma' );
   var started = false;
   server.start(
-    assign( karmaOptions( specFiles ), opts ),
+    Object.assign( karmaOptions( specFiles ), opts ),
     () => {
       runner.run( {} );
       started = true;

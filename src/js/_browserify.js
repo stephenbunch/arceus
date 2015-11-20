@@ -12,7 +12,6 @@ import babelOptions from './_babelOptions';
 export default function( params ) {
   var merge = require( 'lodash.merge' );
   var path = require( 'path' );
-  var assign = require( 'lodash.assign' );
 
   params = merge({
     config: {
@@ -32,7 +31,7 @@ export default function( params ) {
   var bundle = require( 'browserify' )( browserify );
   bundle = bundle.transform(
     require( 'babelify' ).configure(
-      assign( babelOptions( path.dirname( entry ) ), babelify )
+      Object.assign( babelOptions( path.dirname( entry ) ), babelify )
     )
   );
 

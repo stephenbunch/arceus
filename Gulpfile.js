@@ -1,5 +1,9 @@
-require( 'babel/register' )({
-  stage: 0
+require( 'babel-core/register' )({
+  presets: [ 'es2015' ],
+  plugins: [
+    'babel-plugin-syntax-async-functions',
+    'babel-plugin-transform-regenerator'
+  ]
 });
 
 var gulp = require( 'gulp' );
