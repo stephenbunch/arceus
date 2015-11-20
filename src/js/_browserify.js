@@ -36,8 +36,6 @@ export default function( params ) {
     )
   );
 
-  bundle = bundle.transform( require.resolve( 'require-globify' ) );
-
   if ( envify ) {
     bundle = bundle.transform( require( 'envify/custom' )( envify ) );
   }

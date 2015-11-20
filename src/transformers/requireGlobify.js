@@ -28,7 +28,10 @@ export default function({ Plugin, types: t }) {
                 var name = resolvePathFromGlob( globPath, path );
                 return t.property(
                   'init',
-                  t.literal( Path.basename( name, Path.extname( name ) ) ),
+                  t.literal(
+                    Path.dirname( name ) + '/' +
+                    Path.basename( name, Path.extname( name ) )
+                  ),
                   t.callExpression( node.callee, [ t.literal( basePath + name ) ] )
                 );
               })
