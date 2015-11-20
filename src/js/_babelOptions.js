@@ -1,4 +1,5 @@
 import log from '../util/log';
+import requireGlobify from '../transformers/requireGlobify';
 
 /**
  * @param {String} dirname
@@ -9,6 +10,7 @@ export default function( dirname ) {
   var opts = {
     sourceRoot: dirname,
     stage: 0,
+    plugins: [ requireGlobify ],
     sourceMaps: true
   };
 
