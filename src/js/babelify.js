@@ -8,7 +8,7 @@ import mergeStreams from '../util/mergeStreams';
  * @param {Function} [options=x => x]
  * @returns {stream.Readable}
  */
-export default function( source, outdir, options = opts => opts ) {
+export default function( { source, outdir, options = opts => opts } ) {
   if ( typeof source === 'string' ) {
     source = [ source ];
   }

@@ -1,8 +1,8 @@
-export default function({ port }) {
+export default function( result ) {
   if ( process.send ) {
     process.send({
       status: 'online',
-      port
+      result
     });
   }
 };

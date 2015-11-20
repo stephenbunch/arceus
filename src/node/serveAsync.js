@@ -55,7 +55,7 @@ export default function serveAsync( entry, options = {} ) {
       if ( message.event === 'require' ) {
         watcher.add( message.filename );
       } else if ( message.status === 'online' ) {
-        server.port = message.port;
+        server.result = message.result;
         watcher.on( 'change', function() {
           if ( !restarting ) {
             server.restartAsync();
