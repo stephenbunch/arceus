@@ -4,7 +4,11 @@
  */
 export default function( proc ) {
   return new Promise( resolve => {
-    proc.on( 'exit', () => resolve() );
     proc.kill();
+    if ( proc.connected ) {
+      proc.on( 'exit', () => resolve() );  
+    } else {
+      resolve();
+    }
   });
 };

@@ -1,4 +1,5 @@
 import babelOptions from './_babelOptions';
+import envifyTransformer from '../transformers/envify';
 
 /**
  * @param {Object} params
@@ -30,15 +31,20 @@ export default function( params ) {
   browserify.entries = entry;
 
   var bundle = require( 'browserify' )( browserify );
-  bundle = bundle.transform(
-    require( 'babelify' ).configure(
-      assign( babelOptions( path.dirname( entry ) ), babelify )
-    )
-  );
+  var babelOpts = babelOptions( path.dirname( entry ) );
+
+  if ( babelify ) {
+    babelOpts = babelify( babelOpts );
+  }
 
   if ( envify ) {
-    bundle = bundle.transform( require( 'envify/custom' )( envify ) );
+    babelOpts.plugins = [
+      ...babelOpts.plugins || [],
+      envifyTransformer.configure( envify )
+    ];
   }
+
+  bundle = bundle.transform( require( 'babelify' ).configure( babelOpts ) );
 
   if ( uglify ) {
     if ( typeof uglify === 'boolean' ) {

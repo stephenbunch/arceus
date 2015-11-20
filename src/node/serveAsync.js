@@ -5,83 +5,66 @@ import log from '../util/log';
 /**
  * @param {String} entry
  * @param {Object} [options={}]
- * @returns {Promise}
- */
-export default async function( entry, options ) {
-  var proc;
-  var uid = 0;
-  var killTask;
-  var restartAsync = async () => {
-    var id = ++uid;
-    if ( proc && proc.connected ) {
-      if ( !killTask ) {
-        log( 'Killing process...' );
-        killTask = killProcessAsync( proc ).then( () => {
-          proc = null;
-          killTask = null;
-          log( 'Process killed' );
-        });
-      }
-      await killTask;
-    }
-    if ( id === uid ) {
-      let app = await startAsync( entry, options );
-      if ( id === uid ) {
-        proc = app.proc;
-        if ( app.result.error ) {
-          throw new Error( `Server error: ${ app.result.error }` );
-        } else {
-          server.port = app.result.port;
-        }
-      } else {
-        await killProcessAsync( app.proc );
-      }
-    }
-  };
-  var server = {
-    async restartAsync() {
-      log( 'Restaring server...' );
-      try {
-        await restartAsync();
-        log( 'Server restarted' );
-      } catch( err ) {
-        log( err.message )
-      }
-    },
-    stopAsync() {
-      return killProcessAsync( proc );
-    }
-  };
-  await restartAsync();
-  return server;
-};
-
-/**
- * @param {String} entry
- * @param {Object} [options={}]
  * @param {Array.<String>} [options.args=[]]
  * @param {Array.<String>} [options.nodeArgs=[]]
  * @returns {Promise}
  */
-function startAsync( entry, { args = [], nodeArgs = [] } = {} ) {
+export default function serveAsync( entry, options = {} ) {
+  var { args = [], nodeArgs = [] } = options;
   return new Promise( ( resolve, reject ) => {
     var { fork } = require( 'child_process' );
-    var proc = fork( entry, args, {
+    args = [
+      ...args,
+      `${ process.env.PWD }/${ entry }`
+    ];
+    var proc = fork( require.resolve( './_runServer' ), args, {
       execArgv: nodeArgs
     });
-    proc.on( 'message', function( message ) {
-      var result;
-      try {
-        result = {
-          proc,
-          result: JSON.parse( message )
-        };
-      } catch ( err ) {
-        log( formatError( err ) );
-        reject( err );
-        return;
+
+    var chokidar = require( 'chokidar' );
+    var watcher = chokidar.watch( [], {
+      ignoreInitial: true
+    });
+
+    var restarting = false;
+    var server = {
+      async stopAsync() {
+        watcher.close();
+        await killProcessAsync( proc );
+      },
+
+      async restartAsync() {
+        restarting = true;
+        try {
+          log( 'Restaring server...' );
+          log( 'Killing process...' );
+          await killProcessAsync( proc );
+          log( 'Process killed' );
+          server = await serveAsync( entry, options );
+          watcher.close();
+          log( 'Server restarted' );
+        } catch( err ) {
+          log( err.message );
+        } finally {
+          restarting = false;
+        }
       }
-      resolve( result );
+    };
+
+    proc.on( 'message', function( message ) {
+      if ( message.event === 'require' ) {
+        watcher.add( message.filename );
+      } else if ( message.status === 'online' ) {
+        server.port = message.port;
+        watcher.on( 'change', function() {
+          if ( !restarting ) {
+            server.restartAsync();
+          }
+        });
+        resolve( server );
+      } else if ( message.status === 'error' ) {
+        reject( new Error( message.error ) );
+      }
     });
   });
-}
+};
