@@ -1,5 +1,4 @@
 import formatError from '../util/formatError';
-import log from '../util/log';
 
 export default function( error ) {
   if ( process.send ) {
@@ -8,6 +7,6 @@ export default function( error ) {
       error: formatError( error )
     });
   } else {
-    log( formatError( error ) );
+    console.log( formatError( error ) );
   }
 };
