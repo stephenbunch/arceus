@@ -7,7 +7,7 @@ Module.prototype.load = function( filename ) {
     event: 'require',
     filename: filename
   });
-  _load.apply( this, arguments );
+  return _load.apply( this, arguments );
 };
 
 try {

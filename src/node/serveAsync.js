@@ -66,5 +66,9 @@ export default function serveAsync( entry, options = {} ) {
         reject( new Error( message.error ) );
       }
     });
+
+    proc.on( 'error', function( err ) {
+      console.log( formatError( err ) );
+    });
   });
 };
