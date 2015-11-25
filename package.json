@@ -1,6 +1,6 @@
 {
   "name": "arceus",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A collection of build tools.",
   "main": "dist",
   "scripts": {
@@ -47,12 +47,14 @@
     "lodash.assign": "^3.2.0",
     "lodash.clonedeep": "^3.0.2",
     "lodash.merge": "^3.3.2",
+    "lodash.throttle": "^3.0.4",
     "merge-stream": "^1.0.0",
     "minimatch": "^3.0.0",
     "mocha": "^2.3.2",
     "mold-source-map": "^0.4.0",
     "phantomjs": "^1.9.18",
     "portfinder": "^0.4.0",
+    "rememberify": "^1.0.1",
     "rework-walk": "^1.0.0",
     "run-sequence": "^1.1.2",
     "scriptjs": "^2.5.7",
@@ -61,7 +63,6 @@
     "strip-json-comments": "^1.0.4",
     "uglifyify": "^3.0.1",
     "urijs": "^1.16.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.4.0"
+    "vinyl-source-stream": "^1.1.0"
   }
 }

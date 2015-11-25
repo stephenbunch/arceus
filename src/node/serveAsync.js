@@ -28,6 +28,8 @@ export default function serveAsync( entry, options = {} ) {
 
     var restarting = false;
     var server = {
+      ready: Promise.resolve(),
+
       async stopAsync() {
         watcher.close();
         await killProcessAsync( proc );
@@ -40,7 +42,8 @@ export default function serveAsync( entry, options = {} ) {
           log( 'Killing process...' );
           await killProcessAsync( proc );
           log( 'Process killed' );
-          server = await serveAsync( entry, options );
+          server.ready = serveAsync( entry, options );
+          Object.assign( server, await server.ready );
           watcher.close();
           log( 'Server restarted' );
         } catch( err ) {
