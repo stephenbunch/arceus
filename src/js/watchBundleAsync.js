@@ -86,7 +86,6 @@ export default function( params, callback = ( () => {} )  ) {
       .on( 'error', err => reject( err ) )
       .on( 'end', () => {
         resolve({
-          rebuild: () => invalidate( entry ),
           dispose: () => {
             bundle.close();
             watcher.close();

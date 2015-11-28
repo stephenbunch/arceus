@@ -1,6 +1,7 @@
 import formatError from '../util/formatError';
 import killProcessAsync from '../util/killProcessAsync';
 import log from '../util/log';
+import AutoResetEvent from '../util/_AutoResetEvent';
 
 /**
  * @param {String} entry
@@ -28,7 +29,9 @@ export default function serveAsync( entry, options = {} ) {
 
     var restarting = false;
     var server = {
-      ready: Promise.resolve(),
+      get ready() {
+        return this._wait.handle;
+      },
 
       async stopAsync() {
         watcher.close();
@@ -37,15 +40,23 @@ export default function serveAsync( entry, options = {} ) {
 
       async restartAsync() {
         restarting = true;
+        if ( !server._wait ) {
+          server._wait = new AutoResetEvent();
+        }
         try {
           log( 'Restaring server...' );
           log( 'Killing process...' );
           await killProcessAsync( proc );
           log( 'Process killed' );
-          server.ready = serveAsync( entry, options );
-          Object.assign( server, await server.ready );
+
+          let next = await serveAsync( entry, options );
+          server.stopAsync = next.stopAsync;
+          server.restartAsync = next.restartAsync;
+          next._wait = server._wait;
           watcher.close();
           log( 'Server restarted' );
+
+          server._wait.set();
         } catch( err ) {
           log( err.message );
         } finally {
