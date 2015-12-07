@@ -1,7 +1,7 @@
 import formatError from '../util/formatError';
 import killProcessAsync from '../util/killProcessAsync';
 import log from '../util/log';
-import AutoResetEvent from '../util/_AutoResetEvent';
+import ManualResetEvent from '../util/_ManualResetEvent';
 
 /**
  * @param {String} entry
@@ -29,8 +29,10 @@ export default function serveAsync( entry, options = {} ) {
 
     var restarting = false;
     var server = {
+      _wait: new ManualResetEvent(),
+
       get ready() {
-        return this._wait.handle;
+        return server._wait.handle;
       },
 
       async stopAsync() {
@@ -40,9 +42,7 @@ export default function serveAsync( entry, options = {} ) {
 
       async restartAsync() {
         restarting = true;
-        if ( !server._wait ) {
-          server._wait = new AutoResetEvent();
-        }
+        server._wait.reset();
         try {
           log( 'Restaring server...' );
           log( 'Killing process...' );
@@ -75,6 +75,7 @@ export default function serveAsync( entry, options = {} ) {
             server.restartAsync();
           }
         });
+        server._wait.set();
         resolve( server );
       } else if ( message.status === 'error' ) {
         reject( new Error( message.error ) );

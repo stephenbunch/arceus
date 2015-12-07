@@ -1,14 +1,13 @@
-export default class AutoResetEvent {
+export default class ManualResetEvent {
   constructor() {
-    this._reset();
+    this.reset();
   }
 
   set() {
     this._resolve.apply( undefined, arguments );
-    this._reset();
   }
 
-  _reset() {
+  reset() {
     this.handle = new Promise( resolve => {
       this._resolve = resolve;
     });
