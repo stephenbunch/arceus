@@ -9,6 +9,7 @@ var sinon = require( 'sinon' );
 
 var sinonChai = require( 'sinon-chai' );
 chai.use( sinonChai );
+chai.use( require( 'chai-as-promised' ) );
 
 var mocha = new Mocha({ bail: true });
 
