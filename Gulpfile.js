@@ -27,5 +27,9 @@ gulp.task( 'watch', function() {
 });
 
 gulp.task( 'default', function() {
-  return arceus.util.gulpAsync( gulp, 'clean', 'make' );
+  return arceus.util.gulpAsync( gulp, 'clean', 'make', 'test' );
+});
+
+gulp.task( 'test', function() {
+  return arceus.test.nodeAsync( 'test/**/*.spec.js' );
 });

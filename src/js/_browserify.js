@@ -1,5 +1,6 @@
 import babelOptions from './_babelOptions';
 import envifyTransformer from '../transformers/envify';
+import shimTransformer from '../transformers/shim';
 
 /**
  * @param {Object} params
@@ -26,7 +27,7 @@ export default function( params ) {
   }, params );
 
   var { entry, config = {} } = params;
-  var { envify, uglify, browserify, babelify } = config;
+  var { envify, uglify, browserify, babelify, shim } = config;
 
   browserify.entries = entry;
 
@@ -37,10 +38,19 @@ export default function( params ) {
     babelOpts = babelify( babelOpts );
   }
 
+  babelOpts.plugins = babelOpts.plugins || [];
+
   if ( envify ) {
     babelOpts.plugins = [
-      ...babelOpts.plugins || [],
+      ...babelOpts.plugins,
       envifyTransformer.configure( envify )
+    ];
+  }
+
+  if ( shim ) {
+    babelOpts.plugins = [
+      ...babelOpts.plugins,
+      shimTransformer.configure( shim )
     ];
   }
 
