@@ -1,6 +1,6 @@
 /**
  * @param {Object} params
- * @param {String} params.entry Entry file.
+ * @param {String|Array.<String>} params.entry Entry file(s).
  * @param {String} paras.outfile Destination path.
  * @param {stream.Transform} [params.transform]
  * @returns {stream.Readable}
@@ -16,9 +16,13 @@ export default function({ entry, outfile, transform }) {
   var cssGlobbing = require( 'gulp-css-globbing' );
   var concat = require( 'gulp-concat' );
 
+  var entryExtensions = (
+    typeof entry === 'string' ? [ entry ] : entry
+  ).map( x => path.extname( x ) );
+
   var stream = gulp.src( entry ).pipe(
     cssGlobbing({
-      extensions: [ '.css', path.extname( entry ) ]
+      extensions: [ '.css', ...entryExtensions ]
     })
   );
 
