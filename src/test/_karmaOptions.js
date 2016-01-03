@@ -8,11 +8,11 @@ export default function( specFiles ) {
   return {
     frameworks: [ 'mocha', 'browserify' ],
     files: [
-      ROOT_DIR + '/node_modules/babel/node_modules/babel-core/browser-polyfill.js',
-      ROOT_DIR + '/node_modules/chai/chai.js',
-      ROOT_DIR + '/node_modules/sinon/pkg/sinon.js',
-      ROOT_DIR + '/node_modules/sinon-chai/lib/sinon-chai.js',
-      ROOT_DIR + '/node_modules/chai-as-promised/lib/chai-as-promised.js',
+      path.dirname( require.resolve( 'babel' ) ) + '/node_modules/babel-core/browser-polyfill.js',
+      path.dirname( require.resolve( 'chai' ) ) + '/chai.js',
+      path.resolve( path.dirname( require.resolve( 'sinon' ) ) + '/../' ) + '/pkg/sinon.js',
+      require.resolve( 'sinon-chai' ),
+      require.resolve( 'chai-as-promised' ),
       ROOT_DIR + '/karma_helpers.js',
       specFiles
     ],
