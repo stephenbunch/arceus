@@ -7,10 +7,10 @@
  */
 export default function({ entry, outfile, transform }) {
   var gulp = require( 'gulp' );
-  var minify = require( 'gulp-minify-css' );
+  var nano = require( 'gulp-cssnano' );
   var rename = require( 'gulp-rename' );
   var postcss = require( 'gulp-postcss' );
-  var autoprefixer = require( 'autoprefixer-core' );
+  var autoprefixer = require( 'autoprefixer' );
   var path = require( 'path' );
   var clone = require( 'gulp-clone' );
   var cssGlobbing = require( 'gulp-css-globbing' );
@@ -42,11 +42,7 @@ export default function({ entry, outfile, transform }) {
     )
     .pipe( concat( path.basename( outfile ) ) )
     .pipe( cloneSink )
-    .pipe(
-      minify({
-        keepSpecialComments: 0
-      })
-    )
+    .pipe( nano() )
     .pipe( rename({ extname: '.min.css' }) )
     .pipe( cloneSink.tap() )
     .pipe( gulp.dest( path.dirname( outfile ) ) );

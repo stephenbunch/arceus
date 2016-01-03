@@ -12,15 +12,16 @@ import karmaOptions from './_karmaOptions';
  */
 export default function( specFiles, opts = {} ) {
   var assign = require( 'lodash.assign' );
-  var { server, runner } = require( 'karma' );
+  var { Server, runner } = require( 'karma' );
   var started = false;
-  server.start(
+  var server = new Server(
     assign( karmaOptions( specFiles ), opts ),
     () => {
       runner.run( {} );
       started = true;
     }
   );
+  server.start();
   return {
     reload: () => {
       if ( started ) {
