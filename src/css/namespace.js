@@ -4,7 +4,7 @@
  * @param {RegExp} options.exclude
  * @returns {stream.Transform}
  */
-export default function( namespace, { exclude } ) {
+export default function( namespace, { exclude } = {} ) {
   var rework = require( 'gulp-rework' );
   var walk = require( 'rework-walk' );
   return rework( style => {
