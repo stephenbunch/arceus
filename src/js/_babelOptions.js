@@ -1,16 +1,15 @@
 import log from '../util/log';
-import requireGlobify from '../transformers/requireGlobify';
 
 /**
  * @param {String} dirname
  * @returns {Object}
  */
-export default function( dirname ) {
+export default function( dirname, params = {} ) {
   var assign = require( 'lodash.assign' );
   var opts = {
     sourceRoot: dirname,
     stage: 0,
-    plugins: [ requireGlobify ],
+    plugins: [],
     sourceMaps: true
   };
 

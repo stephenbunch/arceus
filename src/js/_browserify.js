@@ -1,6 +1,7 @@
 import babelOptions from './_babelOptions';
 import envifyTransformer from '../transformers/envify';
 import shimTransformer from '../transformers/shim';
+import requireGlobify from '../transformers/requireGlobify';
 
 /**
  * @param {Object} params
@@ -39,6 +40,13 @@ export default function( params ) {
   }
 
   babelOpts.plugins = babelOpts.plugins || [];
+
+  babelOpts.plugins = [
+    ...babelOpts.plugins,
+    requireGlobify.configure({
+      onTransform: params.onRequireGlobifyTransform
+    })
+  ];
 
   if ( envify ) {
     babelOpts.plugins = [

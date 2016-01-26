@@ -34,19 +34,38 @@ export default function( params, callback = ( () => {} )  ) {
   var { entry, outfile } = params;
   var minfile = outfile.replace( /\.js$/, '.min.js' );
 
-  // Since we typically use a di container to link code across a project
-  // rather than module imports, watchify isn't able to detect new and
-  // removed files since all the module imports happen in the index.js file
-  // dynamically using the globify transform. So we'll use fireworm to
-  // detect changes and tell browserify that the index file changed.
-  var watcher = chokidar.watch( path.dirname( entry ), {
+  var watcher = chokidar.watch([], {
     ignoreInitial: true
   });
-  watcher.on( 'add', () => invalidate( entry ) );
-  watcher.on( 'unlink', () => invalidate( entry ) );
   watcher.on( 'change', file => invalidate( file ) );
 
-  var bundle = browserify( params ).plugin( rememberify );
+  var onRequireGlobifyTransform = ({ file, requireGlob }) => {
+    var watch = chokidar.watch( requireGlob, {
+      ignoreInitial: true
+    });
+    watch.add( file );
+    watch.on( 'add', () => {
+      watch.close();
+      invalidate( file );
+    });
+    watch.on( 'unlink', ( path ) => {
+      watch.close();
+      if ( path !== file ) {
+        invalidate( file );
+      }
+    });
+    watch.on( 'change', ( path ) => {
+      if ( path === file ) {
+        watch.close();
+      }
+    });
+  };
+
+  var bundle = browserify({
+    ...params,
+    onRequireGlobifyTransform
+  }).plugin( rememberify );
+
   var minify = browserify(
     merge( cloneDeep( params ), {
       config: {
