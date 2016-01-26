@@ -1,6 +1,12 @@
+import mergeStreams from '../util/mergeStreams';
+
 /**
  * @param {Object} params
- * @param {String|Array.<String>} params.entry Entry file(s).
+ * @param {
+     String |
+     Array.<String> |
+     Array.<{entry: String, transform: stream.Transform?}>
+   } params.entry Entry file(s).
  * @param {String} paras.outfile Destination path.
  * @param {stream.Transform} [params.transform]
  * @returns {stream.Readable}
@@ -13,19 +19,28 @@ export default function({ entry, outfile, transform }) {
   var autoprefixer = require( 'autoprefixer' );
   var path = require( 'path' );
   var clone = require( 'gulp-clone' );
-  var cssGlobbing = require( 'gulp-css-globbing' );
   var concat = require( 'gulp-concat' );
 
-  var entryExtensions = (
-    typeof entry === 'string' ? [ entry ] : entry
-  ).map( x => path.extname( x ) );
+  let streams = [];
+  if ( typeof entry === 'string' ) {
+    streams = [ gulp.src( entry ) ];
+  } else if ( Array.isArray( entry ) ) {
+    streams = entry.map( entry => {
+      let transform;
+      if ( typeof entry === 'object' ) {
+        transform = entry.transform;
+        entry = entry.entry;
+      }
+      var stream = cssStream( entry );
+      if ( transform ) {
+        stream = stream.pipe( transform )
+          .on( 'error', err => ret.emit( 'error', err ) );
+      }
+      return stream;
+    });
+  }
 
-  var stream = gulp.src( entry ).pipe(
-    cssGlobbing({
-      extensions: [ '.css', ...entryExtensions ]
-    })
-  );
-
+  var stream = mergeStreams( streams );
   if ( transform ) {
     stream = stream.pipe( transform )
       .on( 'error', err => ret.emit( 'error', err ) );
@@ -49,3 +64,14 @@ export default function({ entry, outfile, transform }) {
 
   return ret;
 };
+
+function cssStream( entry ) {
+  var gulp = require( 'gulp' );
+  var path = require( 'path' );
+  var cssGlobbing = require( 'gulp-css-globbing' );
+  return gulp.src( entry ).pipe(
+    cssGlobbing({
+      extensions: [ '.css', path.extname( entry ) ]
+    })
+  );
+}
