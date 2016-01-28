@@ -33,7 +33,7 @@ export default function({ entry, outfile, transform }) {
       }
       var stream = cssStream( entry );
       if ( transform ) {
-        stream = stream.pipe( transform )
+        stream = transform( stream )
           .on( 'error', err => ret.emit( 'error', err ) );
       }
       return stream;
@@ -42,7 +42,7 @@ export default function({ entry, outfile, transform }) {
 
   var stream = mergeStreams( streams );
   if ( transform ) {
-    stream = stream.pipe( transform )
+    stream = transform( stream )
       .on( 'error', err => ret.emit( 'error', err ) );
   }
 
