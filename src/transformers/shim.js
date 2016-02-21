@@ -1,7 +1,7 @@
 export default {
   configure( shims = {} ) {
     return function({ Plugin, types: t }) {
-      return new Plugin( 'envify', {
+      return new Plugin( 'shim', {
         visitor: {
           CallExpression( node, parent, scope, file ) {
             if (
