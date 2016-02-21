@@ -1,8 +1,10 @@
 import availablePortAsync from '../util/availablePortAsync';
 
-export default async function({ port }) {
+export default async function( options ) {
+  var { port } = options;
   var browserSync = require( 'browser-sync' ).create();
   browserSync.init({
+    ...options,
     ui: {
       port: await availablePortAsync( 3000 )
     },
