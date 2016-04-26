@@ -41,7 +41,10 @@ export default {
                       key = key.replace( /^\.\//, '' );
                       return t.objectProperty(
                         t.stringLiteral( key ),
-                        t.callExpression( node.callee, [ t.stringLiteral( basePath + name ) ] )
+                        t.memberExpression(
+                          t.callExpression( node.callee, [ t.stringLiteral( basePath + name ) ] ),
+                          t.identifier('default')
+                        )
                       );
                     })
                   )
