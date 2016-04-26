@@ -1,9 +1,3 @@
-import karmaAsync from './karmaAsync';
-import nodeAsync from './nodeAsync';
-import serve from './serve';
-
-export default {
-  karmaAsync,
-  nodeAsync,
-  serve
-};
+export karmaAsync from './karmaAsync';
+export nodeAsync from './nodeAsync';
+export serve from './serve';

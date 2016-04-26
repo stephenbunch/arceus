@@ -1,5 +1,1 @@
-import proxyAsync from './proxyAsync';
-
-export default {
-  proxyAsync
-};
+export proxyAsync from './proxyAsync';

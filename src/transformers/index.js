@@ -1,11 +1,4 @@
-import dependencyInjection from './dependencyInjection';
-import envify from './envify';
-import requireGlobify from './requireGlobify';
-import shim from './shim';
-
-export default {
-  dependencyInjection,
-  envify,
-  requireGlobify,
-  shim
-};
+export dependencyInjection from './dependencyInjection';
+export envify from './envify';
+export requireGlobify from './requireGlobify';
+export shim from './shim';

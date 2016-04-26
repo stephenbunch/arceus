@@ -1,5 +1,5 @@
-import arceus from '../../src';
-import { transform } from 'babel';
+import * as arceus from '../../src';
+import { transform } from 'babel-core';
 
 describe( 'shim', function() {
   it( 'should transform require statements to member expressions', function() {
@@ -9,7 +9,7 @@ describe( 'shim', function() {
       })
     });
     expect( result.code.replace( /\n+/g, ' ' ) ).to.equal(
-      `'use strict'; var x = window['foo-bar'];`
+      `var x = window['foo-bar'];`
     );
   });
 });

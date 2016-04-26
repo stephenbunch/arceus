@@ -1,9 +1,11 @@
 export default {
   configure( env = {} ) {
-    return function({ Plugin, types: t }) {
-      return new Plugin( 'envify', {
+    return function({ types: t }) {
+      return {
         visitor: {
-          MemberExpression( node, parent, scope, file ) {
+          MemberExpression( path, state ) {
+            const { node, parent, scope } = path;
+            const { file } = state;
             if (
               t.isMemberExpression( node.object ) &&
               node.object.object.name === 'process' &&
@@ -15,14 +17,14 @@ export default {
                 node.property.name;
               let value = env[ prop ];
               if ( typeof value === 'string' ) {
-                return t.literal( value );
+                path.replaceWith( t.literal( value ) );
               } else {
-                return t.identifier( String( value ) );
+                path.replaceWith( t.identifier( String( value ) ) );
               }
             }
           }
         }
-      });
+      };
     };
   }
 };

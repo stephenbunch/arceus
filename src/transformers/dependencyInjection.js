@@ -1,9 +1,11 @@
 export default {
   configure( options = {} ) {
-    return function({ Plugin, types: t }) {
-      return new Plugin( 'dependencyInjection', {
+    return function({ types: t }) {
+      return {
         visitor: {
-          Program: function( node, parent, scope, file ) {
+          Program: function( path, state ) {
+            const { node, parent, scope } = path;
+            const { file } = state;
             if (
               typeof options.shouldTransform === 'function' &&
               !options.shouldTransform( file.opts.filename )
@@ -60,24 +62,26 @@ export default {
               }
             });
 
-            return t.program([
-              t.exportDefaultDeclaration(
-                t.arrayExpression(
-                  names.concat([
-                    t.functionExpression( null, params,
-                      t.blockStatement(
-                        header.concat( body ).concat([
-                          t.returnStatement( defaultExport.declaration )
-                        ])
+            path.replaceWith(
+              t.program([
+                t.exportDefaultDeclaration(
+                  t.arrayExpression(
+                    names.concat([
+                      t.functionExpression( null, params,
+                        t.blockStatement(
+                          header.concat( body ).concat([
+                            t.returnStatement( defaultExport.declaration )
+                          ])
+                        )
                       )
-                    )
-                  ])
+                    ])
+                  )
                 )
-              )
-            ]);
+              ])
+            );
           }
         }
-      });
+      };
     };
   }
 };

@@ -1,9 +1,3 @@
-import sendError from './sendError';
-import sendOnline from './sendOnline';
-import serveAsync from './serveAsync';
-
-export default {
-  sendError,
-  sendOnline,
-  serveAsync
-};
+export sendError from './sendError';
+export sendOnline from './sendOnline';
+export serveAsync from './serveAsync';

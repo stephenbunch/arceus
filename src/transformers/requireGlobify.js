@@ -5,10 +5,12 @@ import baseFromGlob from '../util/baseFromGlob';
 
 export default {
   configure( delegate = {} ) {
-    return function({ Plugin, types: t }) {
-      return new Plugin( 'requireGlobify', {
+    return function({ types: t }) {
+      return {
         visitor: {
-          CallExpression( node, parent, scope, file ) {
+          CallExpression( path, state ) {
+            const { node, parent, scope } = path;
+            const { file } = state;
             if (
               node.callee.name === 'require' &&
               node.arguments.length === 2 &&
@@ -31,23 +33,24 @@ export default {
                 let paths = glob.sync( globPath, {
                   nodir: true
                 });
-                return t.objectExpression(
-                  paths.map( path => {
-                    var name = resolvePathFromGlob( globPath, path );
-                    var key = Path.dirname( name ) + '/' + Path.basename( name, Path.extname( name ) );
-                    key = key.replace( /^\.\//, '' );
-                    return t.property(
-                      'init',
-                      t.literal( key ),
-                      t.callExpression( node.callee, [ t.literal( basePath + name ) ] )
-                    );
-                  })
+                path.replaceWith(
+                  t.objectExpression(
+                    paths.map( path => {
+                      var name = resolvePathFromGlob( globPath, path );
+                      var key = Path.dirname( name ) + '/' + Path.basename( name, Path.extname( name ) );
+                      key = key.replace( /^\.\//, '' );
+                      return t.objectProperty(
+                        t.stringLiteral( key ),
+                        t.callExpression( node.callee, [ t.stringLiteral( basePath + name ) ] )
+                      );
+                    })
+                  )
                 );
               }
             }
           }
         }
-      });
+      };
     };
   }
 };

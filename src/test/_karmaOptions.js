@@ -8,7 +8,7 @@ export default function( specFiles ) {
   return {
     frameworks: [ 'mocha', 'browserify' ],
     files: [
-      path.dirname( require.resolve( 'babel' ) ) + '/node_modules/babel-core/browser-polyfill.js',
+      path.resolve( path.dirname( require.resolve( 'babel-polyfill' ) ) + '/../' ) + '/browser.js',
       path.dirname( require.resolve( 'chai' ) ) + '/chai.js',
       path.resolve( path.dirname( require.resolve( 'sinon' ) ) + '/../' ) + '/pkg/sinon.js',
       require.resolve( 'sinon-chai' ),

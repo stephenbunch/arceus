@@ -1,5 +1,5 @@
-import arceus from '../../src';
-import { transform } from 'babel';
+import * as arceus from '../../src';
+import { transform } from 'babel-core';
 
 describe( 'envify', function() {
   it( 'should transform process.env statements to literals', function() {
@@ -9,7 +9,7 @@ describe( 'envify', function() {
       })
     });
     expect( result.code.replace( /\n+/g, ' ' ) ).to.equal(
-      `"use strict"; var x = 2;`
+      `var x = 2;`
     );
   });
 });

@@ -1,6 +1,10 @@
-require( 'babel/register' )({
-  stage: 0
+require( 'babel-register' )({
+  presets: ['es2015', 'stage-0'],
+  plugins: [
+    'transform-decorators-legacy'
+  ]
 });
+require( 'babel-polyfill' );
 
 var gulp = require( 'gulp' );
 var arceus = require( './src' );

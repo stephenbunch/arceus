@@ -1,17 +1,7 @@
-import css from './css';
-import js from './js';
-import node from './node';
-import test from './test';
-import transformers from './transformers';
-import util from './util';
-import web from './web';
-
-export default {
-  css,
-  js,
-  node,
-  test,
-  transformers,
-  util,
-  web
-};
+export * as css from './css';
+export * as js from './js';
+export * as node from './node';
+export * as test from './test';
+export * as transformers from './transformers';
+export * as util from './util';
+export * as web from './web';

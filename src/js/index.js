@@ -1,11 +1,4 @@
-import babelify from './babelify';
-import babelifyWatch from './babelifyWatch';
-import bundle from './bundle';
-import watchBundleAsync from './watchBundleAsync';
-
-export default {
-  babelify,
-  babelifyWatch,
-  bundle,
-  watchBundleAsync
-};
+export babelify from './babelify';
+export babelifyWatch from './babelifyWatch';
+export bundle from './bundle';
+export watchBundleAsync from './watchBundleAsync';

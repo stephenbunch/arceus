@@ -1,33 +1,15 @@
-import assetUrlAsync from './assetUrlAsync';
-import availablePortAsync from './availablePortAsync';
-import baseFromGlob from './baseFromGlob';
-import copy from './copy';
-import deleteAsync from './deleteAsync';
-import execAsync from './execAsync';
-import formatError from './formatError';
-import gulpAsync from './gulpAsync';
-import gulpWatch from './gulpWatch';
-import killProcessAsync from './killProcessAsync';
-import log from './log';
-import mergeStreams from './mergeStreams';
-import resolvePathFromGlob from './resolvePathFromGlob';
-import touchFileAsync from './touchFileAsync';
-import watch from './watch';
-
-export default {
-  assetUrlAsync,
-  availablePortAsync,
-  baseFromGlob,
-  copy,
-  deleteAsync,
-  execAsync,
-  formatError,
-  gulpAsync,
-  gulpWatch,
-  killProcessAsync,
-  log,
-  mergeStreams,
-  resolvePathFromGlob,
-  touchFileAsync,
-  watch
-};
+export assetUrlAsync from './assetUrlAsync';
+export availablePortAsync from './availablePortAsync';
+export baseFromGlob from './baseFromGlob';
+export copy from './copy';
+export deleteAsync from './deleteAsync';
+export execAsync from './execAsync';
+export formatError from './formatError';
+export gulpAsync from './gulpAsync';
+export gulpWatch from './gulpWatch';
+export killProcessAsync from './killProcessAsync';
+export log from './log';
+export mergeStreams from './mergeStreams';
+export resolvePathFromGlob from './resolvePathFromGlob';
+export touchFileAsync from './touchFileAsync';
+export watch from './watch';

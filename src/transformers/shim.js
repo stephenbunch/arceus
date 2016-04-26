@@ -1,9 +1,11 @@
 export default {
   configure( shims = {} ) {
-    return function({ Plugin, types: t }) {
-      return new Plugin( 'shim', {
+    return function({ types: t }) {
+      return {
         visitor: {
-          CallExpression( node, parent, scope, file ) {
+          CallExpression( path, state ) {
+            const { node, parent, scope } = path;
+            const { file } = state;
             if (
               node.callee.name === 'require' &&
               node.arguments.length === 1 &&
@@ -11,15 +13,18 @@ export default {
             ) {
               let module = node.arguments[0].value;
               if ( typeof shims[ module ] === 'string' ) {
-                return t.memberExpression(
-                  t.identifier( 'window' ),
-                  t.identifier( shims[ module ] )
+                path.replaceWith(
+                  t.memberExpression(
+                    t.identifier( 'window' ),
+                    t.stringLiteral( shims[ module ] ),
+                    true
+                  )
                 );
               }
             }
           }
         }
-      });
+      };
     };
   }
 };
