@@ -1,9 +1,4 @@
-require( 'babel-register' )({
-  presets: ['es2015', 'stage-0'],
-  plugins: [
-    'transform-decorators-legacy'
-  ]
-});
+require( 'babel-register' );
 require( 'babel-polyfill' );
 
 var gulp = require( 'gulp' );
