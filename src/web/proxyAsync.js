@@ -21,6 +21,10 @@ export default async function( options ) {
 
     injectCss( stream ) {
       stream.pipe( browserSync.stream() );
+    },
+
+    exit() {
+      browserSync.exit()
     }
   }
 };
